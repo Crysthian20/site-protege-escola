@@ -189,7 +189,7 @@ if (privacyLinks.length && privacySections.length) {
     privacyLinks.forEach(link => {
       const isActive = link.getAttribute("href") === `#${id}`;
       link.classList.toggle("is-active", isActive);
-      if (isActive && window.innerWidth <= 900) {
+      if (isActive && window.innerWidth > 560 && window.innerWidth <= 900) {
         link.scrollIntoView({ behavior:"smooth", block:"nearest", inline:"center" });
       }
     });
@@ -203,6 +203,25 @@ if (privacyLinks.length && privacySections.length) {
   }, { rootMargin:"-25% 0px -60% 0px", threshold:0 });
 
   privacySections.forEach(section => privacyObserver.observe(section));
+
+  const privacyIndex = document.querySelector(".privacy-index");
+  const privacyToggle = privacyIndex?.querySelector(".privacy-index-toggle");
+
+  if (privacyIndex && privacyToggle) {
+    privacyToggle.addEventListener("click", () => {
+      const isOpen = privacyIndex.classList.toggle("is-open");
+      privacyToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    privacyLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 560) {
+          privacyIndex.classList.remove("is-open");
+          privacyToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+  }
 }
 
 /* CANAL DE DENUNCIAS */
